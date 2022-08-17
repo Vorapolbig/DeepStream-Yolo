@@ -1,0 +1,12 @@
+ARG BASE_IMAGE=nvcr.io/nvidia/deepstream-l4t:6.1-iot
+FROM ${BASE_IMAGE}
+
+# RUN apt install -y g++
+
+WORKDIR /home
+RUN git clone https://github.com/marcoslucianops/DeepStream-Yolo \
+    && cd DeepStream-Yolo \
+    && CUDA_VER=11.4 make -C nvdsinfer_custom_impl_Yolo
+
+WORKDIR /home/model/
+CMD ["deepstream-test5-app", "-c", "config_yolov4-p6.txt"]
